@@ -39,6 +39,25 @@ class IMG_MenubarGUI(Menu):
         gScale.add_command(label="1-bit", command=lambda: self.grey_scale(1))
         algorithms.add_cascade(label="Grey Level Resolution", menu = gScale)  
 
+        hE = Menu(algorithms)
+        hE.add_command(label="Global", command=lambda: self.histogram)
+        hE.add_command(label="Local - 3 x 3", command=lambda: self.local_histogram(0))
+        hE.add_command(label="Local - 5 x 5", command=lambda: self.local_histogram(1))
+        hE.add_command(label="Local - 7 x 7", command=lambda: self.local_histogram(2))
+        hE.add_command(label="Local - 9 x 9", command=lambda: self.local_histogram(3))
+     
+        algorithms.add_cascade(label="Histogram Equilzation", menu = hE)  
+
+        filter = Menu(algorithms)
+        filter.add_command(label="Smooth Filter", command= self.smooth)
+        filter.add_command(label="Median Filter", command= self.median)
+        filter.add_command(label="Sharpening Filter", command= self.sharpen)
+        filter.add_command(label="High Boosting Filter", command= self.hbf)
+        filter.add_command(label="Bit Place Slice", command= self.bit_Plane)
+     
+        algorithms.add_cascade(label="Filters", menu = filter)  
+
+
         self.add_cascade(label="Algorithms", menu=algorithms)  
 
         help = Menu(self, tearoff=0)  
@@ -83,6 +102,60 @@ class IMG_MenubarGUI(Menu):
             im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
             self.root.disp_img(myDIP.grey_Level(im,level),self.root.imgLabel2,1,1)
             self.root.update_algo("Grey Scaling Level " + str(level))
+
+#~~~~~Assignment 2 Code ~~~~~~~
+    def histogram(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            self.root.disp_img(myDIP.histogram_eq(im),self.root.imgLabel2,1,1)
+            self.root.update_algo("Global Histogram")
+
+    def local_histogram(self,mask):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            self.root.disp_img(myDIP.histogram_eq_local(im,mask),self.root.imgLabel2,1,1)
+            lst = ["3","5","7","9"]
+            self.root.update_algo("Local Histogram - Mask " + lst[mask]+" x "+ lst[mask])
+    
+    def smooth(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            self.root.disp_img(myDIP.smooth_filter(im),self.root.imgLabel2,1,1)
+            self.root.update_algo("Smooth Filter")
+
+    def median(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            self.root.disp_img(myDIP.median_filter(im),self.root.imgLabel2,1,1)
+            self.root.update_algo("Median Filter")
+
+    def sharpen(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            self.root.disp_img(myDIP.sharpen_Laplacian_filter(im),self.root.imgLabel2,1,1)
+            self.root.update_algo("Sharpen Laplace Filter")
+
+    def hbf(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            m = askstring('Boost Factor', 'A:')
+            self.root.disp_img(myDIP.high_boosting_filter(im,m),self.root.imgLabel2,1,1)
+            self.root.update_algo("High Boosting Filter")
+    
+    def bit_Plane(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            m = askstring('Bit Plane', 'HIGH or LOW:')
+            self.root.disp_img(myDIP.bit_plane_slice(im,m),self.root.imgLabel2,1,1)
+            self.root.update_algo("Bit Plane Algorithm - " + m + " Order only")
+#~~~~~Assignment 2 Code ~~~~~~~
 
     def open_file(self):
         filetypes = (('All files', '*.*'),)
