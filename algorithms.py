@@ -330,12 +330,317 @@ def bit_plane_slice(image,bit):
     show_Img("Bit Splicing - " + bit,new_image)
     show_Img("Recombined",eight_bit + seven_bit + six_bit + five_bit+four_bit + three_bit + two_bit + one_bit)
 
-    
-def main():
-    # load the image. The onl time when I rely on an external algorithm to process the image to working format for this this exercise
-    im = cv.imread("lena512.pgm")
-    im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
 
+
+#~~~~~~~~ Assignment 3 ~~~~~~~~~~~~~~
+def mask_gen(image,mask,x,y):
+    temp_arr = []
+    #print(str(mask))
+    #print("Image pixel: "+ str(x) +"," + str(y) +": " + str(image[x][y]))
+    if mask >=3:    #mask 3x3
+        temp_arr.append(image[x-1][y-1])
+        temp_arr.append(image[x-1][y])
+        temp_arr.append(image[x-1][y+1])
+
+        temp_arr.append(image[x][y-1])
+        temp_arr.append(image[x][y])
+        temp_arr.append(image[x][y+1])
+
+        temp_arr.append(image[x+1][y-1])
+        temp_arr.append(image[x+1][y])
+        temp_arr.append(image[x+1][y+1])
+        
+    if mask >=5:    #mask 5x5 add ontop of 3x3 mask
+        temp_arr.append(image[x-2][y-2])
+        temp_arr.append(image[x-2][y-1])
+        temp_arr.append(image[x-2][y])
+        temp_arr.append(image[x-2][y+1])
+        temp_arr.append(image[x-2][y+2])
+
+        temp_arr.append(image[x-1][y-2])
+        temp_arr.append(image[x-1][y+2])
+
+        temp_arr.append(image[x][y-2])
+        temp_arr.append(image[x][y+2])
+
+        temp_arr.append(image[x+1][y-2])
+        temp_arr.append(image[x+1][y+2])
+
+        temp_arr.append(image[x+2][y-2])
+        temp_arr.append(image[x+2][y-1])
+        temp_arr.append(image[x+2][y])
+        temp_arr.append(image[x+2][y+1])
+        temp_arr.append(image[x+2][y+2])
+      
+    if mask >=7:
+        temp_arr.append(image[x-3][y-3])
+        temp_arr.append(image[x-3][y-2])
+        temp_arr.append(image[x-3][y-1])
+        temp_arr.append(image[x-3][y])
+        temp_arr.append(image[x-3][y+1])
+        temp_arr.append(image[x-3][y+2])
+        temp_arr.append(image[x-3][y+3])
+
+        temp_arr.append(image[x-2][y-3])
+        temp_arr.append(image[x-2][y+3])
+        
+        temp_arr.append(image[x-1][y-3])
+        temp_arr.append(image[x-1][y+3])
+
+        temp_arr.append(image[x][y-3])
+        temp_arr.append(image[x][y+3])
+
+        temp_arr.append(image[x+1][y-3])
+        temp_arr.append(image[x+1][y+3])
+
+        temp_arr.append(image[x+2][y-3])
+        temp_arr.append(image[x+2][y+3])
+
+        temp_arr.append(image[x+3][y-3])
+        temp_arr.append(image[x+3][y-2])
+        temp_arr.append(image[x+3][y-1])
+        temp_arr.append(image[x+3][y])
+        temp_arr.append(image[x+3][y+1])
+        temp_arr.append(image[x+3][y+2])
+        temp_arr.append(image[x+3][y+3])
+
+    if mask >=9:   
+        temp_arr.append(image[x-4][y-4])
+        temp_arr.append(image[x-4][y-3])
+        temp_arr.append(image[x-4][y-2])
+        temp_arr.append(image[x-4][y-1])
+        temp_arr.append(image[x-4][y])
+        temp_arr.append(image[x-4][y+1])
+        temp_arr.append(image[x-4][y+2])
+        temp_arr.append(image[x-4][y+3])
+        temp_arr.append(image[x-4][y+4])
+
+        temp_arr.append(image[x-3][y-4])
+        temp_arr.append(image[x-3][y+4])
+
+        temp_arr.append(image[x-2][y-4])
+        temp_arr.append(image[x-2][y+4])
+        
+        temp_arr.append(image[x-1][y-4])
+        temp_arr.append(image[x-1][y+4])
+
+        temp_arr.append(image[x][y-4])
+        temp_arr.append(image[x][y+4])
+
+        temp_arr.append(image[x+1][y-4])
+        temp_arr.append(image[x+1][y+4])
+
+        temp_arr.append(image[x+2][y-4])
+        temp_arr.append(image[x+2][y+4])
+
+        temp_arr.append(image[x+3][y-4])
+        temp_arr.append(image[x+3][y+4])
+
+        temp_arr.append(image[x+4][y-4])
+        temp_arr.append(image[x+4][y-3])
+        temp_arr.append(image[x+4][y-2])
+        temp_arr.append(image[x+4][y-1])
+        temp_arr.append(image[x+4][y])
+        temp_arr.append(image[x+4][y+1])
+        temp_arr.append(image[x+4][y+2])
+        temp_arr.append(image[x+4][y+3])
+        temp_arr.append(image[x+4][y+4])
+    #print("Image pixel array: "+ str(x) +"," + str(y) +": " + str(len(temp_arr)))
+    return temp_arr
+
+def QuickSort(arr):
+    less = []
+    equal = []
+    greater = []
+
+    if len(arr) > 1:
+        pivot = arr[0]
+        for x in arr:
+            if x < pivot:
+                less.append(x)
+            elif x == pivot:
+                equal.append(x)
+            elif x > pivot:
+                greater.append(x)
+
+        return QuickSort(less)+equal+QuickSort(greater)  
+    else:  
+        return arr
+
+def Arithmetic_mean_filter(image,mask):
+    data = asarray(image)
+    a,b = image.shape
+    new_image = np.zeros([a, b])
+
+    msk_sz = (mask-1)/2 #1,2,3,4 -> 3*3,5*5,7*7,9*9
+    msk_sz = int(msk_sz)
+    for i in range(msk_sz,a-msk_sz):
+        for j in range(msk_sz,b-msk_sz):
+            arr=mask_gen(data,mask, i,j)  
+          
+            total = 0
+            for k in range(len(arr)):
+                total += arr[k]
+            total=int(total/(mask*mask))
+          
+            new_image[i][j]=total
+    cv.imwrite("Arithmean.png", new_image)
+    return new_image
+
+def Geometric_mean_filter(image,mask):
+    data = asarray(image)
+    a,b = image.shape
+    new_image = np.zeros([a, b])
+
+    msk_sz = (mask-1)/2 #1,2,3,4 -> 3*3,5*5,7*7,9*9
+    msk_sz = int(msk_sz)
+    
+    for i in range(msk_sz,a-msk_sz):
+        for j in range(msk_sz,b-msk_sz):
+            arr=mask_gen(data,mask, i,j)
+            #print(str(arr))
+            #mult = np.prod(arr) 
+            #GEO_res = mult ** (1.0/(mask*mask))
+         
+            
+            #G= (1*2*3 ..*n)^(1.0/n)
+            G = np.log(arr)
+            G = np.exp(G.mean())
+            #print(str(int(GEO_res)))
+            new_image[i][j]=int(G)
+    cv.imwrite("Geometric.png", new_image)
+    return new_image
+
+def Harmonic_mean_filter(image,mask):
+    data = asarray(image)
+    a,b = image.shape
+    new_image = np.zeros([a, b])
+
+    msk_sz = (mask-1)/2 #1,2,3,4 -> 3*3,5*5,7*7,9*9
+    msk_sz = int(msk_sz)
+    
+    for i in range(msk_sz,a-msk_sz):
+        for j in range(msk_sz,b-msk_sz):
+            arr=mask_gen(data,mask, i,j)
+            har = 0
+            for k in range(len(arr)): 
+                har += (1/arr[k]) 
+            Harmonic = ((mask*mask)/har)
+            new_image[i][j] =int(Harmonic)
+    cv.imwrite("Harmonic.png", new_image)
+    return new_image
+
+def Contraharmonic_mean_filter(image,mask, Q):
+    if Q == -1:
+        return Harmonic_mean_filter(image,mask)
+    if Q == 0:
+        return Arithmetic_mean_filter(image,mask)
+    
+    data = asarray(image)
+    a,b = image.shape
+    new_image = np.zeros([a, b])
+
+    msk_sz = (mask-1)/2 #1,2,3,4 -> 3*3,5*5,7*7,9*9
+    msk_sz = int(msk_sz)
+    
+    for i in range(msk_sz,a-msk_sz):
+        for j in range(msk_sz,b-msk_sz):
+            arr=mask_gen(data,mask, i,j)
+            num = 0
+            dem = 0
+            for k in range(len(arr)):
+                num += arr[k] ** (Q+1)
+                dem += arr[k] ** (Q)
+            contraHar = int(num/dem)
+            new_image[i][j] = contraHar
+    cv.imwrite("ContraHarmonic.png", new_image)
+    return new_image
+
+def Max_filter(image,mask):
+    data = asarray(image)
+    a,b = image.shape
+    new_image = np.zeros([a, b])
+
+    msk_sz = (mask-1)/2 #1,2,3,4 -> 3*3,5*5,7*7,9*9
+    msk_sz = int(msk_sz)
+    
+    for i in range(msk_sz,a-msk_sz):
+        for j in range(msk_sz,b-msk_sz):
+            arr=mask_gen(data,mask, i,j)
+            new_image[i][j]=max(arr)
+    cv.imwrite("Max.png", new_image)
+    return new_image
+
+def Min_filter(image,mask):
+    data = asarray(image)
+    a,b = image.shape
+    new_image = np.zeros([a, b])
+
+    msk_sz = (mask-1)/2 #1,2,3,4 -> 3*3,5*5,7*7,9*9
+    msk_sz = int(msk_sz)
+    
+    for i in range(msk_sz,a-msk_sz):
+        for j in range(msk_sz,b-msk_sz):
+            arr=mask_gen(data,mask, i,j)
+            new_image[i][j]=min(arr)
+    cv.imwrite("Min.png", new_image)
+    return new_image
+
+def Midpoint_filter(image,mask):
+    data = asarray(image)
+    a,b = image.shape
+    new_image = np.zeros([a, b])
+
+    msk_sz = (mask-1)/2 #1,2,3,4 -> 3*3,5*5,7*7,9*9
+    msk_sz = int(msk_sz)
+    
+    for i in range(msk_sz,a-msk_sz):
+        for j in range(msk_sz,b-msk_sz):
+            arr=mask_gen(data,mask, i,j)
+            minA = min(arr)
+            maxA = max(arr)
+            new_image[i][j]=(minA+maxA)/2
+    cv.imwrite("Midpoint.png", new_image)
+    return new_image
+
+def Alpha_trimmed_mean_filter(image,mask,alpha):
+    data = asarray(image)
+    a,b = image.shape
+    new_image = np.zeros([a, b])
+
+    msk_sz = (mask-1)/2 #1,2,3,4 -> 3*3,5*5,7*7,9*9
+    msk_sz = int(msk_sz)
+    
+    for i in range(msk_sz,a-msk_sz):
+        for j in range(msk_sz,b-msk_sz):
+            arr=mask_gen(data,mask, i,j)
+            arr = QuickSort(arr)    #order elements
+                    
+            # Calculate the trim coefficient
+            d = int((mask*mask)*(alpha)/2)
+            #print(str(b))
+            if (d != 0):
+                arr = arr[d:len(arr)-d]
+            #print(arr)
+            total = 0
+            for k in range(len(arr)):
+                total += arr[k]
+            #print(total)       
+            total=int(total/len(arr))
+            #print(str(len(arr)))
+         
+            #print(total)
+            new_image[i][j]=total
+    cv.imwrite("Alpha.png", new_image)
+    return new_image
+
+def main():
+    # load the image. The only time when I rely on an external algorithm to process the image to working format for this this exercise
+    #im = cv.imread("lena512.pgm")
+    im = cv.imread("Fig0507g.tif")
+    im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+    #show_Img("Orignal", im)
+    
     #nearest_Neighbor_Interpolation(im, (64,64))
     #linear_Method(im,(64,64),"X")
     #linear_Method(im,(64,64),"Y")
@@ -348,5 +653,13 @@ def main():
     #sharpen_Laplacian_filter(im)
     #high_boosting_filter(im,50)
     #bit_plane_slice(im,"HIGH")
+    #Arithmetic_mean_filter(im,9)
+    Geometric_mean_filter(im,9)
+    #Harmonic_mean_filter(im,3)
+    #Contraharmonic_mean_filter(im,3,1.5)
+    #Max_filter(im,3)
+    #Min_filter(im,3)
+    #Midpoint_filter(im,3)
+    #Alpha_trimmed_mean_filter(im,3,0.2)
 if __name__ == "__main__":
     main()

@@ -54,6 +54,15 @@ class IMG_MenubarGUI(Menu):
         filter.add_command(label="Sharpening Filter", command= self.sharpen)
         filter.add_command(label="High Boosting Filter", command= self.hbf)
         filter.add_command(label="Bit Place Slice", command= self.bit_Plane)
+
+        filter.add_command(label="Arithmetic Mean", command= self.Arithmetic_mean)
+        filter.add_command(label="Geometric Mean", command= self.Geometric_mean)
+        filter.add_command(label="Harmonic Mean", command= self.Harmonic_mean)
+        filter.add_command(label="Contraharmonic Mean", command= self.Contraharmonic_mean)
+        filter.add_command(label="Max Filter", command= self.Max_filter)
+        filter.add_command(label="Min Filter", command= self.Max_filter)
+        filter.add_command(label="Midpoint Filter", command= self.Midpoint_filter)
+        filter.add_command(label="Alpha Trimmed Mean",command=self.AlphaTrimmed_mean)
      
         algorithms.add_cascade(label="Filters", menu = filter)  
 
@@ -156,6 +165,74 @@ class IMG_MenubarGUI(Menu):
             self.root.disp_img(myDIP.bit_plane_slice(im,m),self.root.imgLabel2,1,1)
             self.root.update_algo("Bit Plane Algorithm - " + m + " Order only")
 #~~~~~Assignment 2 Code ~~~~~~~
+
+#~~~~~Assignment 3 Code ~~~~~~~
+    def Arithmetic_mean(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            m = askstring('Mask Size n', 'nxn size:')
+            self.root.disp_img(myDIP.Arithmetic_mean_filter(im,int(m)),self.root.imgLabel2,1,1)
+            self.root.update_algo("Arithmetic Mean Algorithm - " + str(m) +"x"+ str(m)+ " size")
+
+    def Geometric_mean(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            m = askstring('Mask Size n', 'nxn size:')
+            self.root.disp_img(myDIP.Geometric_mean_filter(im,int(m)),self.root.imgLabel2,1,1)
+            self.root.update_algo("Geometric Mean Algorithm - " + str(m) +"x"+ str(m)+ " size")
+
+    def Harmonic_mean(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            m = askstring('Mask Size n', 'nxn size:')
+            self.root.disp_img(myDIP.Harmonic_mean_filter(im,int(m)),self.root.imgLabel2,1,1)
+            self.root.update_algo("Harmonic Mean Algorithm - " + str(m) +"x"+ str(m)+ " size")
+
+    def Contraharmonic_mean(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            m = askstring('Mask Size n', 'nxn size:')
+            q = askstring('Power', 'q:')
+            self.root.disp_img(myDIP.Contraharmonic_mean_filter(im,int(m),int(q)),self.root.imgLabel2,1,1)
+            self.root.update_algo("Contraharmonic Mean Algorithm - " + str(m) +"x"+ str(m)+ " size with Q = " + q)
+
+    def Max_filter(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            m = askstring('Mask Size n', 'nxn size:')
+            self.root.disp_img(myDIP.Max_filter(im,int(m)),self.root.imgLabel2,1,1)
+            self.root.update_algo("Max Algorithm - " + str(m) +"x"+ str(m)+ " size")
+
+    def Min_filter(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            m = askstring('Mask Size n', 'nxn size:')
+            self.root.disp_img(myDIP.Min_filter(im,int(m)),self.root.imgLabel2,1,1)
+            self.root.update_algo("Min Algorithm - " + str(m) +"x"+ str(m)+ " size")
+
+    def Midpoint_filter(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            m = askstring('Mask Size n', 'nxn size:')
+            self.root.disp_img(myDIP.Midpoint_filter(im,int(m)),self.root.imgLabel2,1,1)
+            self.root.update_algo("Midpoint Algorithm - " + str(m) +"x"+ str(m)+ " size")
+
+    def AlphaTrimmed_mean(self):
+        if self.root.dir_text.get() !="No image selected":
+            im = cv.imread(str(self.root.dir_text.get()))
+            im = cv.cvtColor(im,cv.COLOR_BGR2GRAY)
+            m = askstring('Mask Size n', 'nxn size:')
+            A = askstring('Alpha', 'Alpha:')
+            self.root.disp_img(myDIP.Alpha_trimmed_mean_filter(im,int(m),int(A)),self.root.imgLabel2,1,1)
+            self.root.update_algo("Max Algorithm - " + str(m) +"x"+ str(m)+ " size")
+#~~~~~Assignment 3 Code ~~~~~~~
 
     def open_file(self):
         filetypes = (('All files', '*.*'),)
